@@ -1,6 +1,9 @@
+> [!IMPORTANT]
+> I'm continuing work on this project under closed-source development for Steam release, but the existing code in this repo remains here under MIT license.
+> I might make a tutorial video series for this in the future
+
 > [!NOTE]
-> I'm moving this project to closed-source development for Steam release, but the existing code in this repo remains here under MIT license.
-> I might make a tutorial video series covering some implementations in this project (currently low on my priority list)
+> The code base available here was mostly developed in Godot 4.3 and successfully migrated to Godot 4.4 with few minor patches.
 # Polyfocus Demo
 This is the source code repo for [**Polyfocus Demo**](https://store.steampowered.com/app/3576190/Polyfocus_Demo/), a free-to-use pomodoro timer from [**Polyfocus**](https://store.steampowered.com/app/3434580/Polyfocus/), a gamified productivity app.
 
