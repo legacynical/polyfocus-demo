@@ -1,19 +1,21 @@
-# A pomodoro app made in godot!
+# Polyfocus Demo
+This is the source code repo for [**Polyfocus Demo**](https://store.steampowered.com/app/3576190/Polyfocus_Demo/), a free-to-use pomodoro timer from [**Polyfocus**](https://store.steampowered.com/app/3434580/Polyfocus/), a gamified productivity app.
 
-(in active development, feedback welcome)
+If you want help support me, wishlist [**Polyfocus on Steam!**](https://store.steampowered.com/app/3434580/Polyfocus/) (Release Date: TBA)
 
-![image](https://github.com/user-attachments/assets/d3fec726-b5af-43a2-8b9b-91508da49556)
+## Time to ~~nap~~ work!
+![image](https://github.com/user-attachments/assets/b7d178d2-b14a-474f-b108-e4f74f56c7b3)
+> [!NOTE]
+> Also saves window position on multi-monitor setups!
 
-![image](https://github.com/user-attachments/assets/bd687fc2-68b9-4251-a0ec-db975783651a)
+## Additional features!
+![image](https://github.com/user-attachments/assets/1f4791a6-659d-4408-850b-89f513fe5734)
 
-![image](https://github.com/user-attachments/assets/33bc048b-5921-4c81-acfc-e6ed2d107ab1)
-
-(move & add not implemented yet)
-
-![image](https://github.com/user-attachments/assets/b2802716-a3be-4e4e-99df-c00210f8f8a8)
+## Customizable, saved settings!
+![image](https://github.com/user-attachments/assets/25d9b398-2bd2-4048-a776-1472b058531a)
 
 
-Settings are locally saved in [polyfocus]
-
-![image](https://github.com/user-attachments/assets/66632033-b072-4f4d-ba0d-0a97531232e6)
-
+Settings are locally saved in [polyfocus]\
+Windows: ``` %APPDATA%\Godot\app_userdata\[project_name] ```\
+macOS: ``` ~/Library/Application Support/Godot/app_userdata/[project_name] ```\
+Linux: ``` ~/.local/share/godot/app_userdata/[project_name] ```
