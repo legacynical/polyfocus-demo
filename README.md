@@ -1,6 +1,6 @@
 > [!IMPORTANT]
 > I'm continuing work on this project under closed-source development for Steam release, but the existing code in this repo remains here under MIT license.
-> I might make a tutorial video series for this in the future
+> I might make a tutorial video series for this in the future.
 
 > [!NOTE]
 > The code base available here was mostly developed in Godot 4.3 and successfully migrated to Godot 4.4 with few minor patches.
