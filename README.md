@@ -1,3 +1,6 @@
+> [!NOTE]
+> I'm moving this project to closed-source development for Steam release, but the existing code in this repo remains here under MIT license
+> I might make a tutorial video series covering some implementations in this project (currently low on my priority list)
 # Polyfocus Demo
 This is the source code repo for [**Polyfocus Demo**](https://store.steampowered.com/app/3576190/Polyfocus_Demo/), a free-to-use pomodoro timer from [**Polyfocus**](https://store.steampowered.com/app/3434580/Polyfocus/), a gamified productivity app.
 
