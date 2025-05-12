@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="polyfocus"
+config/name="polyfocus-demo"
 config/version="0.8.4"
 run/main_scene="res://scenes/pomodoro timer/pomodoro_timer.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
