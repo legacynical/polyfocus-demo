@@ -32,8 +32,6 @@ gdscript/warnings/untyped_declaration=1
 
 window/size/viewport_width=480
 window/size/viewport_height=270
-window/size/transparent=true
-window/size/extend_to_title=true
 window/energy_saving/keep_screen_on=false
 window/subwindows/embed_subwindows=false
 window/per_pixel_transparency/allowed=true
@@ -48,7 +46,7 @@ run/main_run_args="--verbose"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GPTIntegration/plugin.cfg")
+enabled=PackedStringArray()
 
 [gui]
 
