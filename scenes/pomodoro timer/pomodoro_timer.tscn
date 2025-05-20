@@ -641,6 +641,7 @@ size_flags_stretch_ratio = 3.0
 
 [node name="SettingMenu" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -659,7 +660,6 @@ current_tab = 0
 [node name="Timer Settings" type="ScrollContainer" parent="SettingMenu/TabContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-scroll_vertical = 100
 metadata/_tab_index = 0
 
 [node name="TimerSettingContainer" type="VBoxContainer" parent="SettingMenu/TabContainer/Timer Settings"]
@@ -1113,6 +1113,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 toggle_mode = true
+button_pressed = true
 texture_normal = ExtResource("5_b358n")
 texture_pressed = ExtResource("6_ppuow")
 ignore_texture_size = true
@@ -1536,9 +1537,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -168.0
+offset_left = -180.0
 offset_top = -16.0
-offset_right = -2.0
+offset_right = -14.0
 offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -1550,9 +1551,9 @@ vertical_alignment = 1
 
 [node name="CurrentDateTime" parent="Overlay" instance=ExtResource("4_rjnu3")]
 unique_name_in_owner = true
-offset_left = 3.0
+offset_left = 15.0
 offset_top = 0.0
-offset_right = 3.0
+offset_right = 15.0
 size_flags_horizontal = 2
 size_flags_vertical = 6
 
