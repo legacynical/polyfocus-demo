@@ -236,7 +236,9 @@ func _on_pomo_timer_timeout() -> void:
 				rate_session()
 		mode.BREAK:
 			if is_switch_mode_on_timeout: # user non-changeable true
-				switch_mode() # would user even want auto mode switch on timeout off?
+				switch_mode() # would user even want auto mode switch on timeout off? 
+					# maybe if they manage their own breaks but it defeats the purpose 
+					# of pomodoros since it kinda leads to time blindness during breaks
 				
 func reset_timer(new_session_time_in_minutes: int, is_auto_start_enabled: bool = false) -> void:
 	print("resetting timer to: ", new_session_time_in_minutes, " min")
