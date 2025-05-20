@@ -34,6 +34,7 @@ extends Resource
 @export var flow_session: int
 
 @export var low_processor_mode_toggle: bool
+@export var window_popup_on_timeout_toggle: bool
 #endregion
 
 

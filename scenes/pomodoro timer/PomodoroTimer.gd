@@ -33,6 +33,7 @@ extends Node
 @onready var focused_session: SpinBox = %FocusedSession
 @onready var flow_session: SpinBox = %FlowSession
 @onready var low_processor_mode_toggle: TextureButton = %LowProcessorModeToggle
+@onready var popup_on_timeout_toggle: TextureButton = %PopupOnTimeoutToggle
 
 @onready var task_timer_menu: PanelContainer = %TaskTimerMenu
 @onready var task_timer_grid_container: GridContainer = %TTGridContainer
@@ -222,8 +223,11 @@ func update_panel_color() -> void:
 		#new_stylebox.bg_color = Color.html("999999")
 		#background.add_theme_stylebox_override("panel", new_stylebox)
 
+
 func _on_pomo_timer_timeout() -> void:
 	#AudioManager.timer_complete.play()
+	if popup_on_timeout_toggle.is_pressed():
+		popup_window()
 	match current_mode:
 		mode.FOCUS:
 			if not is_progressive_pomo_enabled or is_progressive_pomo_break_due:
@@ -402,6 +406,11 @@ func _on_low_processor_mode_toggle_toggled(toggled_on: bool, is_muted: bool = fa
 	OS.set_low_processor_usage_mode(toggled_on)
 	print("low processor mode: ",OS.is_in_low_processor_usage_mode())
 
+func _on_popup_on_timeout_toggle_toggled(toggled_on: bool, is_muted: bool = false) -> void:
+	if not is_muted:
+		AudioManager.click_basic.play()
+	
+
 func _on_window_reset_button_pressed() -> void:
 	load_window()
 
@@ -414,12 +423,9 @@ func _on_window_default_button_pressed() -> void:
 	DisplayServer.window_set_size(default_window_size)
 	DisplayServer.window_set_position(default_window_position)
 
-
-		
-
-
-		
-
+func popup_window() -> void:
+	DisplayServer.window_request_attention()
+	DisplayServer.window_move_to_foreground()
 #endregion
 ##END Timer Settings Menu
 
@@ -783,6 +789,10 @@ func get_caller_function_name():
 	return "Unknown"
 
 func _on_debug_pressed() -> void:
-	print("low processor mode: ",OS.is_in_low_processor_usage_mode())
+	#print("low processor mode: ",OS.is_in_low_processor_usage_mode())
+	print("testing window popup in 3 sec...")
+	await get_tree().create_timer(3.0).timeout
+	popup_window()
+	
 #endregion
 ##END DEBUG

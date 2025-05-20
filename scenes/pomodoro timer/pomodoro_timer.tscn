@@ -162,7 +162,6 @@ text = "Total Focus Time [00:00]"
 
 [node name="debug" type="Button" parent="BackgroundPanel/TimerElements/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 text = "debug"
 
@@ -641,7 +640,6 @@ size_flags_stretch_ratio = 3.0
 
 [node name="SettingMenu" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -660,6 +658,7 @@ current_tab = 0
 [node name="Timer Settings" type="ScrollContainer" parent="SettingMenu/TabContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+scroll_vertical = 100
 metadata/_tab_index = 0
 
 [node name="TimerSettingContainer" type="VBoxContainer" parent="SettingMenu/TabContainer/Timer Settings"]
@@ -1094,6 +1093,29 @@ text = "default"
 
 [node name="Control" type="Control" parent="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainerA"]
 layout_mode = 2
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainer10"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_stretch_ratio = 5.0
+tooltip_text = "Hover each option for details."
+mouse_filter = 1
+theme = ExtResource("6_pybon")
+text = " Popup On Timeout"
+
+[node name="PopupOnTimeoutToggle" type="TextureButton" parent="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainer10"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("5_b358n")
+texture_pressed = ExtResource("6_ppuow")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="Audio" type="ScrollContainer" parent="SettingMenu/TabContainer"]
 visible = false
@@ -1565,6 +1587,7 @@ scale = Vector2(0.545, 0.545)
 [connection signal="pressed" from="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainerA/WindowReset" to="." method="_on_window_reset_button_pressed"]
 [connection signal="pressed" from="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainerA/WindowSave" to="." method="_on_window_save_button_pressed"]
 [connection signal="pressed" from="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainerA/WindowDefault" to="." method="_on_window_default_button_pressed"]
+[connection signal="toggled" from="SettingMenu/TabContainer/Timer Settings/TimerSettingContainer/HBoxContainer10/PopupOnTimeoutToggle" to="." method="_on_popup_on_timeout_toggle_toggled"]
 [connection signal="gui_input" from="TaskTimerMenu" to="." method="_on_tt_grid_container_gui_input"]
 [connection signal="pressed" from="SessionRating/VBoxContainer/HBoxContainer/Flow" to="." method="_on_flow_pressed"]
 [connection signal="pressed" from="SessionRating/VBoxContainer/HBoxContainer2/Focused" to="." method="_on_focused_pressed"]
