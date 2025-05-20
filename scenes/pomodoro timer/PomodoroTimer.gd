@@ -66,7 +66,7 @@ extends Node
 @onready var saved_game: SavedGame = SavedGame.new()
 #@onready var save_file: String = "user://savegame.tres"
 @onready var save_file: String = "user://[v" + polyfocus_version + "]savegame.tres"
-
+@onready var debug_button: Button = %debug
 
 var default_window_size: Vector2 = Vector2(480, 270)
 var default_window_position = null # sets to center of user's primary screen on 1st startup
@@ -92,6 +92,8 @@ enum mode {
 var current_mode: mode = mode.FOCUS
 
 func _ready() -> void:
+	if OS.is_debug_build():
+		debug_button.visible = true
 	polyfocus_version_label.text = " Polyfocus v" + polyfocus_version + "-beta"
 	DisplayServer.window_set_min_size(default_window_size)
 	
