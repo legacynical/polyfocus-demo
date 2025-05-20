@@ -35,6 +35,8 @@ extends Resource
 
 @export var low_processor_mode_toggle: bool
 @export var window_popup_on_timeout_toggle: bool
+@export var window_minimize_on_timer_start_toggle: bool
+
 #endregion
 
 

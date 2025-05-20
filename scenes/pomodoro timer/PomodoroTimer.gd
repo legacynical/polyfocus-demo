@@ -34,6 +34,7 @@ extends Node
 @onready var flow_session: SpinBox = %FlowSession
 @onready var low_processor_mode_toggle: TextureButton = %LowProcessorModeToggle
 @onready var popup_on_timeout_toggle: TextureButton = %PopupOnTimeoutToggle
+@onready var minimize_on_timer_start_toggle: TextureButton = %MinimizeOnTimerStartToggle
 
 @onready var task_timer_menu: PanelContainer = %TaskTimerMenu
 @onready var task_timer_grid_container: GridContainer = %TTGridContainer
@@ -183,6 +184,9 @@ func _on_timer_button_pressed() -> void:
 	timer_button.disabled = true
 	AudioManager.click_basic.play()
 	
+	if timer_button.text == "START" && minimize_on_timer_start_toggle.is_pressed():
+		minimize_window()
+	
 	# .is_paused() method checks if the timer is paused and whether locally or globally (useful for scene/node pauses)
 	# for this use case, we care about local timer pause state so we use .paused
 	if timer.paused: # if paused...
@@ -260,6 +264,8 @@ func reset_timer(new_session_time_in_minutes: int, is_auto_start_enabled: bool =
 	quick_timer_button.visible = true
 
 	if is_auto_start_enabled: # auto starts timer after timer reset
+		if minimize_on_timer_start_toggle.is_pressed(): # for starts thru quick timer
+			minimize_window()
 		timer.paused = false
 		timer_button.text = "PAUSE"
 		skip_button.visible = true
@@ -413,7 +419,12 @@ func _on_low_processor_mode_toggle_toggled(toggled_on: bool, is_muted: bool = fa
 func _on_popup_on_timeout_toggle_toggled(toggled_on: bool, is_muted: bool = false) -> void:
 	if not is_muted:
 		AudioManager.click_basic.play()
-	
+	popup_on_timeout_toggle.set_pressed_no_signal(toggled_on)
+
+func _on_minimize_on_timer_start_toggle_toggled(toggled_on: bool, is_muted: bool = false) -> void:
+	if not is_muted:
+		AudioManager.click_basic.play()
+	minimize_on_timer_start_toggle.set_pressed_no_signal(toggled_on)
 
 func _on_window_reset_button_pressed() -> void:
 	load_window()
@@ -428,8 +439,20 @@ func _on_window_default_button_pressed() -> void:
 	DisplayServer.window_set_position(default_window_position)
 
 func popup_window() -> void:
+	#TODO in par with the audio cue for minimizing window, add a fade in sfx for tick tocks
+	# as the timer almost completes- *chef's kiss*
 	DisplayServer.window_request_attention()
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	DisplayServer.window_move_to_foreground()
+
+# NOTE: This should be called in BOTH timer button pressed on "START" AND reset_timer(... , true)
+# within its autostart if clause (for timer start calls thru quick timer menu) for the minimize
+# on timer start feature
+func minimize_window() -> void:
+	#TODO since the minimize takes away the visual cue of the timer start and adding a delay before
+	# this feels janky- add an audio cue instead like a short tick tock sfx that fades away
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
+	
 #endregion
 ##END Timer Settings Menu
 
@@ -627,6 +650,8 @@ func save_timer_setting() -> void:
 	saved_game.flow_session = flow_session.value
 	
 	saved_game.low_processor_mode_toggle = low_processor_mode_toggle.button_pressed
+	saved_game.window_popup_on_timeout_toggle = popup_on_timeout_toggle.button_pressed
+	saved_game.window_minimize_on_timer_start_toggle = minimize_on_timer_start_toggle.button_pressed
 
 	ResourceSaver.save(saved_game, save_file)
 	
@@ -654,6 +679,8 @@ func load_timer_setting() -> void:
 	flow_session.value = saved_game.flow_session
 	
 	_on_low_processor_mode_toggle_toggled(saved_game.low_processor_mode_toggle, is_muted)
+	_on_popup_on_timeout_toggle_toggled(saved_game.window_popup_on_timeout_toggle, is_muted)
+	_on_minimize_on_timer_start_toggle_toggled(saved_game.window_minimize_on_timer_start_toggle, is_muted)
 	
 func save_quick_timers() -> void:
 	print("\nsaving quick timers:")
