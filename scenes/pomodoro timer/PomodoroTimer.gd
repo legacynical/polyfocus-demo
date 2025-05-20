@@ -112,6 +112,8 @@ func _ready() -> void:
 	# DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true) # sets window bar
 	# set_semi_transparent(get_tree().get_root())
 	
+	WindowState.window_restored.connect(_on_window_restored)
+	
 	if not FileAccess.file_exists(save_file):
 		save_window()
 		save_timer_setting()
@@ -805,6 +807,11 @@ func _notification(what) -> void:
 			pass
 #endregion
 ##END Save/Load
+
+# NOTE: This uses the WindowState global singleton which polls the 
+func _on_window_restored() -> void:
+	print("WINDOW RESTORED")
+	DisplayServer.window_move_to_foreground()
 
 # unfocused window not dragging is a known issue that I didn't have to spend a few hours
 # troubleshooting what I did wrong...

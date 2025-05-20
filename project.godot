@@ -23,6 +23,7 @@ boot_splash/minimum_display_time=1000
 
 AudioManager="*res://globals/audio manager/audio_manager.tscn"
 DateTime="*res://globals/date time/date_time.tscn"
+WindowState="*res://globals/window state/window_state.tscn"
 
 [debug]
 
