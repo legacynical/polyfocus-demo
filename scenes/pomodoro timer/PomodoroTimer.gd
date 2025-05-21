@@ -234,8 +234,6 @@ func update_panel_color() -> void:
 
 func _on_pomo_timer_timeout() -> void:
 	#AudioManager.timer_complete.play()
-	if popup_on_timeout_toggle.is_pressed():
-		popup_window()
 	match current_mode:
 		mode.FOCUS:
 			if not is_progressive_pomo_enabled or is_progressive_pomo_break_due:
@@ -247,6 +245,8 @@ func _on_pomo_timer_timeout() -> void:
 				switch_mode() # would user even want auto mode switch on timeout off? 
 					# maybe if they manage their own breaks but it defeats the purpose 
 					# of pomodoros since it kinda leads to time blindness during breaks
+	if popup_on_timeout_toggle.is_pressed():
+		popup_window()
 				
 func reset_timer(new_session_time_in_minutes: int, is_auto_start_enabled: bool = false) -> void:
 	print("resetting timer to: ", new_session_time_in_minutes, " min")
