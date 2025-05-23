@@ -33,6 +33,8 @@ extends Node
 @onready var focused_session: SpinBox = %FocusedSession
 @onready var flow_session: SpinBox = %FlowSession
 @onready var low_processor_mode_toggle: TextureButton = %LowProcessorModeToggle
+@onready var popup_on_timeout_toggle: TextureButton = %PopupOnTimeoutToggle
+@onready var minimize_on_timer_start_toggle: TextureButton = %MinimizeOnTimerStartToggle
 
 @onready var task_timer_menu: PanelContainer = %TaskTimerMenu
 @onready var task_timer_grid_container: GridContainer = %TTGridContainer
@@ -65,7 +67,7 @@ extends Node
 @onready var saved_game: SavedGame = SavedGame.new()
 #@onready var save_file: String = "user://savegame.tres"
 @onready var save_file: String = "user://[v" + polyfocus_version + "]savegame.tres"
-
+@onready var debug_button: Button = %debug
 
 var default_window_size: Vector2 = Vector2(480, 270)
 var default_window_position = null # sets to center of user's primary screen on 1st startup
@@ -91,6 +93,8 @@ enum mode {
 var current_mode: mode = mode.FOCUS
 
 func _ready() -> void:
+	if OS.is_debug_build():
+		debug_button.visible = true
 	polyfocus_version_label.text = " Polyfocus v" + polyfocus_version + "-beta"
 	DisplayServer.window_set_min_size(default_window_size)
 	
@@ -107,6 +111,8 @@ func _ready() -> void:
 	# get_tree().get_root().set_transparent_background(true) # sets window transparency
 	# DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true) # sets window bar
 	# set_semi_transparent(get_tree().get_root())
+	
+	WindowState.window_restored.connect(_on_window_restored)
 	
 	if not FileAccess.file_exists(save_file):
 		save_window()
@@ -180,6 +186,9 @@ func _on_timer_button_pressed() -> void:
 	timer_button.disabled = true
 	AudioManager.click_basic.play()
 	
+	if timer_button.text == "START" && minimize_on_timer_start_toggle.is_pressed():
+		minimize_window()
+	
 	# .is_paused() method checks if the timer is paused and whether locally or globally (useful for scene/node pauses)
 	# for this use case, we care about local timer pause state so we use .paused
 	if timer.paused: # if paused...
@@ -222,6 +231,7 @@ func update_panel_color() -> void:
 		#new_stylebox.bg_color = Color.html("999999")
 		#background.add_theme_stylebox_override("panel", new_stylebox)
 
+
 func _on_pomo_timer_timeout() -> void:
 	#AudioManager.timer_complete.play()
 	match current_mode:
@@ -232,7 +242,11 @@ func _on_pomo_timer_timeout() -> void:
 				rate_session()
 		mode.BREAK:
 			if is_switch_mode_on_timeout: # user non-changeable true
-				switch_mode() # would user even want auto mode switch on timeout off?
+				switch_mode() # would user even want auto mode switch on timeout off? 
+					# maybe if they manage their own breaks but it defeats the purpose 
+					# of pomodoros since it kinda leads to time blindness during breaks
+	if popup_on_timeout_toggle.is_pressed():
+		popup_window()
 				
 func reset_timer(new_session_time_in_minutes: int, is_auto_start_enabled: bool = false) -> void:
 	print("resetting timer to: ", new_session_time_in_minutes, " min")
@@ -252,6 +266,8 @@ func reset_timer(new_session_time_in_minutes: int, is_auto_start_enabled: bool =
 	quick_timer_button.visible = true
 
 	if is_auto_start_enabled: # auto starts timer after timer reset
+		if minimize_on_timer_start_toggle.is_pressed(): # for starts thru quick timer
+			minimize_window()
 		timer.paused = false
 		timer_button.text = "PAUSE"
 		skip_button.visible = true
@@ -402,6 +418,16 @@ func _on_low_processor_mode_toggle_toggled(toggled_on: bool, is_muted: bool = fa
 	OS.set_low_processor_usage_mode(toggled_on)
 	print("low processor mode: ",OS.is_in_low_processor_usage_mode())
 
+func _on_popup_on_timeout_toggle_toggled(toggled_on: bool, is_muted: bool = false) -> void:
+	if not is_muted:
+		AudioManager.click_basic.play()
+	popup_on_timeout_toggle.set_pressed_no_signal(toggled_on)
+
+func _on_minimize_on_timer_start_toggle_toggled(toggled_on: bool, is_muted: bool = false) -> void:
+	if not is_muted:
+		AudioManager.click_basic.play()
+	minimize_on_timer_start_toggle.set_pressed_no_signal(toggled_on)
+
 func _on_window_reset_button_pressed() -> void:
 	load_window()
 
@@ -414,12 +440,21 @@ func _on_window_default_button_pressed() -> void:
 	DisplayServer.window_set_size(default_window_size)
 	DisplayServer.window_set_position(default_window_position)
 
+func popup_window() -> void:
+	#TODO in par with the audio cue for minimizing window, add a fade in sfx for tick tocks
+	# as the timer almost completes- *chef's kiss*
+	DisplayServer.window_request_attention()
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	DisplayServer.window_move_to_foreground()
 
-		
-
-
-		
-
+# NOTE: This should be called in BOTH timer button pressed on "START" AND reset_timer(... , true)
+# within its autostart if clause (for timer start calls thru quick timer menu) for the minimize
+# on timer start feature
+func minimize_window() -> void:
+	#TODO since the minimize takes away the visual cue of the timer start and adding a delay before
+	# this feels janky- add an audio cue instead like a short tick tock sfx that fades away
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
+	
 #endregion
 ##END Timer Settings Menu
 
@@ -617,6 +652,8 @@ func save_timer_setting() -> void:
 	saved_game.flow_session = flow_session.value
 	
 	saved_game.low_processor_mode_toggle = low_processor_mode_toggle.button_pressed
+	saved_game.window_popup_on_timeout_toggle = popup_on_timeout_toggle.button_pressed
+	saved_game.window_minimize_on_timer_start_toggle = minimize_on_timer_start_toggle.button_pressed
 
 	ResourceSaver.save(saved_game, save_file)
 	
@@ -644,6 +681,8 @@ func load_timer_setting() -> void:
 	flow_session.value = saved_game.flow_session
 	
 	_on_low_processor_mode_toggle_toggled(saved_game.low_processor_mode_toggle, is_muted)
+	_on_popup_on_timeout_toggle_toggled(saved_game.window_popup_on_timeout_toggle, is_muted)
+	_on_minimize_on_timer_start_toggle_toggled(saved_game.window_minimize_on_timer_start_toggle, is_muted)
 	
 func save_quick_timers() -> void:
 	print("\nsaving quick timers:")
@@ -769,6 +808,11 @@ func _notification(what) -> void:
 #endregion
 ##END Save/Load
 
+# NOTE: This uses the WindowState global singleton which polls the 
+func _on_window_restored() -> void:
+	print("WINDOW RESTORED")
+	DisplayServer.window_move_to_foreground()
+
 # unfocused window not dragging is a known issue that I didn't have to spend a few hours
 # troubleshooting what I did wrong...
 # issue: https://github.com/godotengine/godot/issues/95577
@@ -783,6 +827,10 @@ func get_caller_function_name():
 	return "Unknown"
 
 func _on_debug_pressed() -> void:
-	print("low processor mode: ",OS.is_in_low_processor_usage_mode())
+	#print("low processor mode: ",OS.is_in_low_processor_usage_mode())
+	print("testing window popup in 3 sec...")
+	await get_tree().create_timer(3.0).timeout
+	popup_window()
+	
 #endregion
 ##END DEBUG
