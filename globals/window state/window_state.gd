@@ -1,12 +1,16 @@
 extends Control
 
-# NOTE: 
-
 signal window_restored
 
-var window_state_prev: int = 0
+var window_state_prev: int = 0 # app starts in windowed mode
 var poll_interval: float = 0.25 # 250ms, 4 poll/sec
 var _running := true
+
+# DisplayServer.window_get_mode() return values
+const WINDOWED: int = 0
+const MINIMIZED: int = 1
+#const MAXIMIZED: int = 2
+#const FULLSCREEN: int = 3
 
 #region Custom Poll Loop
 func _ready() -> void:
@@ -28,10 +32,7 @@ func _poll_loop() -> void:
 #endregion
 
 func check_window_state() -> void:
-	var minimized: int = DisplayServer.window_get_mode() == 1
-	# 0 = windowed, 1 = minimized, 2 = maximized, 3 = fullscreen
-	
-	# if 1 -> 0 (minimized to not minimized)
-	if window_state_prev == 1 and not minimized:
+	var window_state_current: int = DisplayServer.window_get_mode()
+	if window_state_prev == MINIMIZED and window_state_current != MINIMIZED:
 		emit_signal("window_restored")
-	window_state_prev = minimized
+	window_state_prev = window_state_current
