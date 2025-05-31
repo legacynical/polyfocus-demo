@@ -10,13 +10,41 @@ var hour_12: int
 var is_daytime: bool
 var period: String = "??"
 
-func _ready() -> void:
-	update_date()
-	update_time()
+var poll_interval: float = 0.25 # 250ms, 4 poll/sec (+poll/+precision, -poll/+efficiency)
+var _running := true
 
-func _process(_delta: float) -> void:
-	if int(Time.get_ticks_msec() / 1000) % 1 == 0: # get_ticks_msec() has cheap computational cost
-		update_time() # called roughly every second instead of frame
+#NOTE: States to check:
+	# [A] On app start
+	# [B] On new day
+	# [C] On minor time jump (less than 12 hrs?)
+	# [D] on major time jump (more than 1 day)
+	
+#region Custom Poll Loop
+func _ready() -> void:
+	#TODO [A] On app start 
+	_start_polling()
+	
+
+func _start_polling() -> void:
+	_running = true
+	_poll_loop()
+
+func stop_polling() -> void:
+	_running = false
+	
+func _poll_loop() -> void:
+	await get_tree().create_timer(poll_interval).timeout
+	if not _running:
+		return	
+	
+	update_date() # polled function
+		#TODO [B] On new day
+		#TODO [D] On major time jump
+	update_time() # polled function
+		#TODO [C] On minor time jump
+	
+	_poll_loop()
+#endregion
 
 func update_date() -> void:
 	cached_date = Time.get_date_dict_from_system()
