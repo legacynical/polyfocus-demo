@@ -8,6 +8,7 @@ var window_state_prev: int = 0
 var poll_interval: float = 0.25 # 250ms, 4 poll/sec
 var _running := true
 
+#region Custom Poll Loop
 func _ready() -> void:
 	_start_polling()
 
@@ -22,9 +23,10 @@ func _poll_loop() -> void:
 	await get_tree().create_timer(poll_interval).timeout
 	if not _running:
 		return	
-	check_window_state()
+	check_window_state() # polled function 
 	_poll_loop()
-		
+#endregion
+
 func check_window_state() -> void:
 	var minimized: int = DisplayServer.window_get_mode() == 1
 	# 0 = windowed, 1 = minimized, 2 = maximized, 3 = fullscreen
