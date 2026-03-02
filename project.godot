@@ -8,12 +8,16 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="polyfocus-demo"
 config/version="0.9.1"
 run/main_scene="res://scenes/pomodoro timer/pomodoro_timer.tscn"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=60
 boot_splash/image="uid://dt8sroh0jglk8"
 config/icon="res://polyfocus-logo.svg"
