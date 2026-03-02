@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://ch3wwse0bq8xl" path="res://scenes/ui controls/volume_control.tscn" id="10_lcmql"]
 [ext_resource type="StyleBox" uid="uid://csusgeo1f8t8c" path="res://themes/Exitbutton.tres" id="10_rt072"]
 [ext_resource type="Texture2D" uid="uid://na41aqi1owpq" path="res://graphics/128x128-circle-blank.svg" id="10_sb4l6"]
-[ext_resource type="PackedScene" uid="uid://2etsnaqi3s4u" path="res://scenes/pomodoro timer/polyfocus_version_label.tscn" id="11_4gt85"]
+[ext_resource type="PackedScene" uid="uid://2etsnaqi3s4u" path="res://scenes/version label/polyfocus_version_label.tscn" id="11_4gt85"]
 [ext_resource type="Texture2D" uid="uid://cbopcrt7ijq3l" path="res://graphics/128x128-circle.svg" id="11_cjx1h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_weg84"]
